@@ -1,0 +1,14 @@
+start:
+	ldi #0
+	sta 0x80
+	ldi #1
+
+loop:
+	out #0x04
+	sta 0x81
+	add 0x80
+	bcs start
+	out #0x04
+	sta 0x80
+	add 0x81
+	jmp loop

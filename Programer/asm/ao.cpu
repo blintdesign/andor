@@ -1,0 +1,26 @@
+#align 8
+
+lda {addr} -> 8'0x10 @ (addr)[7:0]		; 0001
+add {addr} -> 8'0x20 @ addr[7:0] 		; 0010
+sub {addr} -> 8'0x30 @ (addr)[7:0]		; 0011
+sta {addr} -> 8'0x40 @ (addr)[7:0]		; 0100
+
+ldi #{imm} -> 8'0x50 @ imm[7:0]			; 0101
+
+jmp {addr} -> 8'0x60 @ (addr)[7:0]		; 0110
+beq {addr} -> 8'0x08 @ (addr -1)[7:0] 	; 00001 
+cmp {addr} -> 8'0x18 @ (addr)[7:0]	    ; 00011 
+bcs {addr} -> 8'0x28 @ (addr -1)[7:0] 	; 00101 
+bmi {addr} -> 8'0x38 @ (addr -1)[7:0] 	; 00111 
+nop        -> 8'0x00					; 0000
+hlt        -> 8'0xf0					; 1111
+out #{imm} -> 5'0x1A @ imm[2:0]			; 1101
+
+;rtr #{imm} -> 8'0x48 @ imm[7:0] 		; 01001
+rtw {addr} -> 8'0x58 @ addr[7:0] 		; 01011
+
+;rtr #{imm} -> 4'0x08 @ imm[3:0] 		; 1000
+
+rtr #{imm},{tens},{ones} -> 4'0x08 @ imm[3:0] @ (tens)[7:0] @ (ones)[7:0]		; 1000
+
+
