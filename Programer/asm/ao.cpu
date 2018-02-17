@@ -16,11 +16,16 @@ nop        -> 8'0x00					; 0000
 hlt        -> 8'0xf0					; 1111
 out #{imm} -> 5'0x1A @ imm[2:0]			; 1101
 
-;rtr #{imm} -> 8'0x48 @ imm[7:0] 		; 01001
-rtw {addr} -> 8'0x58 @ addr[7:0] 		; 01011
 
-;rtr #{imm} -> 4'0x08 @ imm[3:0] 		; 1000
+asl        -> 8'0x48					; 
+lsr        -> 8'0x58					; Meg nem mukodik jol
 
-rtr #{imm},{tens},{ones} -> 4'0x08 @ imm[3:0] @ (tens)[7:0] @ (ones)[7:0]		; 1000
+
+jsr {addr} -> 8'0xA0 @ (addr)[7:0]		; 10100
+rts        -> 8'0xB0					; 10110
+
+
+rtr #{imm},{tens},{ones}   -> 4'0x08 @ imm[3:0] @ (tens)[7:0] @ (ones)[7:0]		; 1000
+rtw #{imm},#{tens},#{ones} -> 4'0x09 @ imm[3:0] @ tens[7:0]   @ ones[7:0]		; 10010
 
 

@@ -30,7 +30,7 @@
 #define JO  0b00000000000000000000100000000000    // Jump: Overflow flag
 #define OB  0b00000000000000000000010000000000    // OUT BCD
 #define NA1 0b00000000000000000000001000000000    // 
-#define NA2 0b00000000000000000000000100000000    // 
+#define ST  0b00000000000000000000000100000000    // Stack
 
 // ROM 4
 #define NA3 0b00000000000000000000000010000000    // 
@@ -44,35 +44,34 @@
 
 
 uint32_t data[] = {
-// T1      T2         T3          T4        T5        T6           T7     T8        T9          T10  T11 <--> T16      CMD   BIN     HEX 
-   MI|CO,  RO|II|CE,  ICR,        0,        0,        0,           0,     0,        0,          0,   0,0,0,0,0,0,   // NOP   00000   0x00
-   MI|CO,  RO|II|CE,  CO|MI,      RO|MI|CE, RO|AI,    ICR,         0,     0,        0,          0,   0,0,0,0,0,0,   // LDA   00010   0x10
-   MI|CO,  RO|II|CE,  CO|MI,      RO|MI|CE, RO|BI,    AI|SF|EO,    ICR,   0,        0,          0,   0,0,0,0,0,0,   // ADD   00100   0x20
-   MI|CO,  RO|II|CE,  CO|MI,      RO|MI|CE, RO|BI,    AI|SU|SF|EO, ICR,   0,        0,          0,   0,0,0,0,0,0,   // SUB   00110   0x30
-   MI|CO,  RO|II|CE,  CO|MI,      RO|MI|CE, AO|RI,    ICR,         0,     0,        0,          0,   0,0,0,0,0,0,   // STA   01000   0x40
-   MI|CO,  RO|II|CE,  CO|MI,      RO|AI|CE, ICR,      0,           0,     0,        0,          0,   0,0,0,0,0,0,   // LDI   01010   0x05
-   MI|CO,  RO|II|CE,  CO|MI,      RO|J,     ICR,      0,           0,     0,        0,          0,   0,0,0,0,0,0,   // JMP   01100   0x60
-   MI|CO,  RO|II|CE,  0,          0,        0,        0,           0,     0,        0,          0,   0,0,0,0,0,0,   //       01110   0x70
-   MI|CO,  RO|II|CE,  IO|RRW|RCS, CO|MI,    RO|MI|CE, RCS|ROE|RI,  CO|MI, RO|MI|CE, RCS|ROE|RI, ICR, 0,0,0,0,0,0,   // RTR   10000   0x80
-   MI|CO,  RO|II|CE,  0,          0,        0,        0,           0,     0,        0,          0,   0,0,0,0,0,0,   // RTW   10010   0x12
-   MI|CO,  RO|II|CE,  0,          0,        0,        0,           0,     0,        0,          0,   0,0,0,0,0,0,   //       10100   0x14
-   MI|CO,  RO|II|CE,  0,          0,        0,        0,           0,     0,        0,          0,   0,0,0,0,0,0,   //       10110   0x16
-   MI|CO,  RO|II|CE,  0,          0,        0,        0,           0,     0,        0,          0,   0,0,0,0,0,0,   //       11000   0x18
-   MI|CO,  RO|II|CE,  IO|OI,      0,        AO|OI,    ICR,         0,     0,        0,          0,   0,0,0,0,0,0,   // OUT   11010   0x1A
-   MI|CO,  RO|II|CE,  0,          0,        0,        0,           0,     0,        0,          0,   0,0,0,0,0,0,   //       11100   0c1C
-   MI|CO,  RO|II|CE,  HLT,        ICR,      0,        0,           0,     0,        0,          0,   0,0,0,0,0,0,   // HLT   11110   0xf0
-   MI|CO,  RO|II|CE,  CO|MI,      RO|JZ,    CE,       ICR,         0,     0,        0,          0,   0,0,0,0,0,0,   // BEQ   00001   0x08
-   MI|CO,  RO|II|CE,  CO|MI,      RO|MI|CE, RO|BI,    SU|SF|EO,    ICR,   0,        0,          0,   0,0,0,0,0,0,   // CMP   00011   0x18
-   MI|CO,  RO|II|CE,  CO|MI,      RO|JC,    CE,       ICR,         0,     0,        0,          0,   0,0,0,0,0,0,   // BCS   00101   0x28
-   MI|CO,  RO|II|CE,  CO|MI,      RO|JN,    CE,       ICR,         0,     0,        0,          0,   0,0,0,0,0,0,   // BMI   00111   0x38
-   MI|CO,  RO|II|CE,  0,          0,         0,       0,           0,     0,        0,          0,   0,0,0,0,0,0,   //       01001   0x48
-   MI|CO,  RO|II|CE,  0,          0,         0,       0,           0,     0,        0,          0,   0,0,0,0,0,0,   //       01011
-  
-  /*
-   MI|CO,  RO|II|CE,  0,    0,          0,        0,      0,     0,  0,0,0,0,0,0,0,0,   // 01101 - 
-   MI|CO,  RO|II|CE,  0,    0,          0,        0,      0,     0,  0,0,0,0,0,0,0,0,   // 01111 - 
-   MI|CO,  RO|II|CE,  0,    0,          0,        0,      0,     0,  0,0,0,0,0,0,0,0,   // 10001 - 
-   MI|CO,  RO|II|CE,  0,    0,          0,        0,      0,     0,  0,0,0,0,0,0,0,0,   // 10011 - 
+// T1   T2         T3          T4        T5             T6           T7     T8        T9          T10  T11 <--> T16      CMD   BIN     HEX 
+MI|CO,  RO|II|CE,  ICR,        0,        0,             0,           0,     0,        0,          0,   0,0,0,0,0,0,   // NOP   00000   0x00
+MI|CO,  RO|II|CE,  CO|MI,      RO|MI|CE, RO|AI,         ICR,         0,     0,        0,          0,   0,0,0,0,0,0,   // LDA   00010   0x10
+MI|CO,  RO|II|CE,  CO|MI,      RO|MI|CE, RO|BI,         AI|SF|EO,    ICR,   0,        0,          0,   0,0,0,0,0,0,   // ADC   00100   0x20
+MI|CO,  RO|II|CE,  CO|MI,      RO|MI|CE, RO|BI,         AI|SU|SF|EO, ICR,   0,        0,          0,   0,0,0,0,0,0,   // SUB   00110   0x30
+MI|CO,  RO|II|CE,  CO|MI,      RO|MI|CE, AO|RI,         ICR,         0,     0,        0,          0,   0,0,0,0,0,0,   // STA   01000   0x40
+MI|CO,  RO|II|CE,  CO|MI,      RO|AI|CE, ICR,           0,           0,     0,        0,          0,   0,0,0,0,0,0,   // LDI   01010   0x05
+MI|CO,  RO|II|CE,  CO|MI,      RO|J,     ICR,           0,           0,     0,        0,          0,   0,0,0,0,0,0,   // JMP   01100   0x60
+MI|CO,  RO|II|CE,  0,          0,        0,             0,           0,     0,        0,          0,   0,0,0,0,0,0,   //       01110   0x70
+MI|CO,  RO|II|CE,  IO|RRW|RCS, CO|MI,    RO|MI|CE,      RCS|ROE|RI,  CO|MI, RO|MI|CE, RCS|ROE|RI, ICR, 0,0,0,0,0,0,   // RTR   10000   0x08
+MI|CO,  RO|II|CE,  IO|RRW|RCS, CO|MI,    RO|CE|RCS|RRW, CO|MI,       RO|CE|RCS|RRW,   ICR, 0,     0,   0,0,0,0,0,0,   // RTW   10010   0x09
+MI|CO,  RO|II|CE,  ST|MI,      ST|CO|RI, CO|MI,         RO|J,        ICR,   0,        0,          0,   0,0,0,0,0,0,   // JSR   10100   0xA0
+MI|CO,  RO|II|CE,  ST|MI,      ST|RO|J,  CE, ICR,                    0,     0,        0,          0,   0,0,0,0,0,0,   // RTS   10110   0xB0
+MI|CO,  RO|II|CE,  0,          0,        0,             0,           0,     0,        0,          0,   0,0,0,0,0,0,   //       11000   0x0C
+MI|CO,  RO|II|CE,  IO|OI,      0,        AO|OI,         ICR,         0,     0,        0,          0,   0,0,0,0,0,0,   // OUT   11010   0x1A
+MI|CO,  RO|II|CE,  0,          0,        0,             0,           0,     0,        0,          0,   0,0,0,0,0,0,   //       11100   0c1C
+MI|CO,  RO|II|CE,  HLT,        ICR,      0,             0,           0,     0,        0,          0,   0,0,0,0,0,0,   // HLT   11110   0xf0
+MI|CO,  RO|II|CE,  CO|MI,      RO|JZ,    CE,            ICR,         0,     0,        0,          0,   0,0,0,0,0,0,   // BEQ   00001   0x08
+MI|CO,  RO|II|CE,  CO|MI,      RO|MI|CE, RO|BI,         SU|SF|EO,    ICR,   0,        0,          0,   0,0,0,0,0,0,   // CMP   00011   0x18
+MI|CO,  RO|II|CE,  CO|MI,      RO|JC,    CE,            ICR,         0,     0,        0,          0,   0,0,0,0,0,0,   // BCS   00101   0x28
+MI|CO,  RO|II|CE,  CO|MI,      RO|JN,    CE,            ICR,         0,     0,        0,          0,   0,0,0,0,0,0,   // BMI   00111   0x38
+MI|CO,  RO|II|CE,  AO|BI,      AI|SF|EO, ICR,           0,           0,     0,        0,          0,   0,0,0,0,0,0,   // ASL   01001   0x48
+MI|CO,  RO|II|CE,  AO|BI,      AI|SU|SF|EO, ICR,        0,           0,     0,        0,          0,   0,0,0,0,0,0,   // LSR   01011   0x58
+MI|CO,  RO|II|CE,  0,          0,        0,             0,           0,     0,        0,          0,   0,0,0,0,0,0,   // 
+MI|CO,  RO|II|CE,  0,          0,        0,             0,           0,     0,        0,          0,   0,0,0,0,0,0,   // 
+MI|CO,  RO|II|CE,  0,          0,        0,             0,           0,     0,        0,          0,   0,0,0,0,0,0,   // 
+MI|CO,  RO|II|CE,  IO|RRW|RCS, CO|MI,    RO|CE|RCS|RRW, CO|MI,       RO|CE|RCS|RRW,   ICR, 0,     0,   0,0,0,0,0,0,   // RTW_   10011  0x__
+/*
    MI|CO,  RO|II|CE,  0,    0,          0,        0,      0,     0,  0,0,0,0,0,0,0,0,   // 10111 - 
    MI|CO,  RO|II|CE,  0,    0,          0,        0,      0,     0,  0,0,0,0,0,0,0,0,   // 11001 - 
    MI|CO,  RO|II|CE,  0,    0,          0,        0,      0,     0,  0,0,0,0,0,0,0,0,   // 11011 - 

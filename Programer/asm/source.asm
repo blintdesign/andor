@@ -1,27 +1,29 @@
-start:
-	; H
-	rtr #0x2,0x40,0x41
+x = 111
+y = 75
 
-	lda 0x41
+ldi #x
+sta 0x80
+
+ldi #y
+sub 0x80
+
+beq equal
+bcs last
+jmp first
+
+equal:
+	ldi #0
+	jmp out
+
+last:
+	ldi #y
+	jmp out
+
+first:
+	ldi #x
+	jmp out
+
+out:
 	out #0x04
-
-	; M
-	rtr #0x1,0x40,0x41
-
-	lda 0x40
-	out #0x00
-
-	lda 0x41
-	out #0x00
-
-	; S
-	rtr #0x0,0x40,0x41
-
-	lda 0x40
-	out #0x00
-
-	lda 0x41
-	out #0x00
-
-	jmp start
-
+	nop
+	hlt

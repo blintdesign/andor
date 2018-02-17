@@ -1,0 +1,71 @@
+﻿
+HLT	- HALT
+MI	- MEMORY IN
+RI	- ROM IN
+RO	- ROM OUT
+IO	- INSTRICTION REGISTER OUT
+II	- INSTRICTION REGISTER IN
+AI	- A REGISTER IN
+AO	- A REGISTER OUT
+ΣO	- SUM (ALU) OUT
+SU	- SUBTACT MODE
+BI	- B REGISTER IN
+BO	- B REGISTER OUT			(Kihagyva)
+OI	- OUTPUT IN
+CE	- COUNTER ENABLE
+CO	- COUNTER OUT
+J	- JUMP
+
+
+=======================================================
+
+LPT Port initial status:
+
+1  - Strobe     : High
+14 - Linefeed   : High
+16 - Initialize : High
+17 - Select     : Low
+
+
+
+BCS, BEQ, BMI, BVS
+
+
+00000	-	*NOP		Nothing
+00001	-	ADD #nn		Add immediate
+00010	-	*ADD nn		Add absolute
+00011	-	*BCS nn		Jump if carry flag is set
+00100	-	*BEQ nn		Jump if zero flag is set
+00101	-	BMI nn		Jump if the negative flag is set
+00110	-	BVS nn		Jump if the overflow flag is set
+00111	-	CMP #nn		Compare immediate
+01000	-	*CMP nn		Compare absolute
+01001	-	DEC nn		Decrement by one
+01010	-	INC nn		Incremented by one
+01011	-	*JMP nn		Jump to the specified address
+01100	-	LDA #nn		Load Accumulator immediate
+01101	-	*LDA nn		Load Accumulator absolute
+01110	-	SUB #nn		Subtract immediate
+01111	-	*SUB nn		Subtract absolute
+10000	-	*STA nn		Store Accumulator
+10001	-	
+10010	-	
+10011	-	
+10100	-	
+10101	-	
+10110	-	
+10111	-	
+11000	-	
+11001	-	
+11010	-	
+11011	-	
+11100	-	
+11101	-	
+11110	-	OUT	n		Output
+							n operandus (last 3 bit):
+								0x03 - Clear line
+								0x04 - Jump to line begining
+11111	-	HLT			Halt the CPU
+
+
+

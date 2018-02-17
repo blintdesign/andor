@@ -194,7 +194,7 @@ EndFunc
 
 
 Func Load()
-   $delay = 20
+   $delay = 5
 
    $split = StringSplit( GUICtrlRead( $FieldHex ) ," ")
 
