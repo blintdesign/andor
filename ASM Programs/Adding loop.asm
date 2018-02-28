@@ -1,14 +1,14 @@
-;Adding loop, and stop if carry bit is set
-
 x = 7
 
-ldi #x
-sta 0x80
-
 start:
+	ldi #0
+
+loop:
 	out #0x04
-	add 0x80
+	add #x
 	bcs stop
-	jmp start
+	jmp loop
+	
 stop:
 	hlt
+	

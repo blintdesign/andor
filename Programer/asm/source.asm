@@ -1,29 +1,11 @@
-x = 111
-y = 75
+; Set display
 
-ldi #x
-sta 0x80
+lcd 0x01
 
-ldi #y
-sub 0x80
+ldi #22
+sta 0x81
 
-beq equal
-bcs last
-jmp first
+out.d 0x81
 
-equal:
-	ldi #0
-	jmp out
 
-last:
-	ldi #y
-	jmp out
-
-first:
-	ldi #x
-	jmp out
-
-out:
-	out #0x04
-	nop
-	hlt
+hlt

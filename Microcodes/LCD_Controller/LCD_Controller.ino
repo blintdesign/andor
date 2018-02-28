@@ -63,7 +63,7 @@ void writeEEPROM(int address, byte data) {
    Read the contents of the EEPROM and print them to the serial monitor.
 */
 void printContents() {
-  for (int base = 0; base <= 2047; base += 16) {
+  for (int base = 0; base <= 256; base += 16) {
     byte data[16];
     for (int offset = 0; offset <= 15; offset += 1) {
       data[offset] = readEEPROM(base + offset);
@@ -108,51 +108,89 @@ void setup() {
   //byte digits[] = { 0x30, 0x31, 0x32, 0x33, 0x34, 0x35, 0x36, 0x37, 0x38, 0x39, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff };
   byte digits[] = { 0x30, 0x31, 0x32, 0x33, 0x34, 0x35, 0x36, 0x37, 0x38, 0x39 };
 
+
+/*
+
+RRW ROE RCS
+ |   |   | 
+ 1   1   0    Parancsok
+ 0   1   0    Definiált parancsok
+ 0   0   1    Eredeti karakter tábla
+
+ 0   1   1    Százasok
+ 1   0   1    Tizesek
+ 1   1   1    Egyesek
+
+
+
+lcd #0x38
+lcd #0xF
+lcd #0x6
+lcd #0x1
+
+out.c #0x41 
+out.c #0x4e
+out.c #0x44 
+out.c #0x4f 
+out.c #0x52 
+out.c #0x20 
+out.d #0x1
+out.c #0x2e 
+out.d #0x0
+
+hlt
+*/
+
+  Serial.println("Delete bank 0");
+  for (int value = 0; value <= 255; value += 1) {
+    writeEEPROM(value, 0 );
+  }
+/*
   Serial.println("Programming ones place");
   for (int value = 0; value <= 255; value += 1) {
-    writeEEPROM(value, digits[value % 10]);
+    writeEEPROM(value + 1792, digits[value % 10]);
   }
   Serial.println("Programming tens place");
   for (int value = 0; value <= 255; value += 1) {
-    writeEEPROM(value + 256, digits[(value / 10) % 10]);
+    writeEEPROM(value + 1280, digits[(value / 10) % 10]);
   }
   Serial.println("Programming hundreds place");
   for (int value = 0; value <= 255; value += 1) {
-    writeEEPROM(value + 512, digits[(value / 100) % 10]);
+    writeEEPROM(value + 768, digits[(value / 100) % 10]);
   }
-  
-  Serial.println("Programming sign");
+
+  Serial.println("Programming Character table");
+  int num = 0;
   for (int value = 0; value <= 255; value += 1) {
-    writeEEPROM(value + 768, 0);
+    //writeEEPROM(value + 256, num + 32 );
+    writeEEPROM(value + 256, num  );
+    num++;
   }
- 
+*/
+  Serial.println("Writing init program");
   
-  
-  Serial.println("Programming ones place (twos complement)");
-  for (int value = -128; value <= 127; value += 1) {
-    writeEEPROM((byte)value + 1024, digits[abs(value) % 10]);
-  }
-  Serial.println("Programming tens place (twos complement)");
-  for (int value = -128; value <= 127; value += 1) {
-    writeEEPROM((byte)value + 1280, digits[abs(value / 10) % 10]);
-  }
-  Serial.println("Programming hundreds place (twos complement)");
-  for (int value = -128; value <= 127; value += 1) {
-    writeEEPROM((byte)value + 1536, digits[abs(value / 100) % 10]);
-  }
-  
-  Serial.println("Programming sign (twos complement)");
-  for (int value = -128; value <= 127; value += 1) {
-    if (value < 0) {
-      writeEEPROM((byte)value + 1792, 0x01);
-    } else {
-      writeEEPROM((byte)value + 1792, 0);
-    }
-  }
+  writeEEPROM(0, 0x38 );         // Function set, 8 bit, 2 lines, 5x7 
+  writeEEPROM(1, 0xF );          // Display ON, Cursor On, Cursor Blinking 
+  writeEEPROM(2, 0x6 );          // Entry Mode, Increment cursor position, No display shift 
+  writeEEPROM(3, 0x1 );          // Display clear
 
 
-  
+  writeEEPROM(4, 0b01001111 );   // Char: O
+  writeEEPROM(5, 0b01001011 );   // Char: K
+  writeEEPROM(6, 0b00101110 );   // Dot
+  writeEEPROM(7, 0b00101110 );   // Dot
+/*
+  Serial.println("Programming commands");
+  int number = 0;
+  for (int value = 0; value <= 255; value += 1) {
+    writeEEPROM(value + 1536, number );
+    number++;
+  }
+*/
 
+
+
+// 2  1  3
 
 
 //***********************************************************************************************************************************
@@ -160,17 +198,19 @@ void setup() {
 //Added Code not to display leading zeros
 
 Serial.println("Modifying tens place");  // Write 0's to 10 addresses starting at address 256 (100h)  9 digits
-  for (int value = 256; value <= 265; value += 1) {
-    writeEEPROM(value, 0xA0);
+  for (int value = 1280; value <= 1289; value += 1) {
+    writeEEPROM(value, 0x0);
   }
 
 Serial.println("Modifying hundreds place");  // Write 0's to 100 addresses starting at address 512 (200h)  99 digits
-  for (int value = 512; value <= 611; value += 1) {
-    writeEEPROM(value, 0xA0);    
+  for (int value = 768; value <= 867; value += 1) {
+    writeEEPROM(value, 0x0);    
   }
 
+  
+/*
 
-Serial.println("Modifying tens place (twos complement)");  // Write 0's to 10 addresses starting at address 1280 (100h)  9 digits
+Serial.println("Modifying tens place (twos complement)");  // Write 0's to 10 addresses starting at address 1280 (100h)  9 digits     9
   for (int value = 1280; value <= 1289; value += 1) {
     writeEEPROM(value, 0xA0);
   }
@@ -179,6 +219,9 @@ Serial.println("Modifying hundreds place (twos complement)");  // Write 0's to 1
   for (int value = 1536; value <= 1635; value += 1) {
     writeEEPROM(value, 0xA0);    
    }  
+
+
+
 
 
 Serial.println("Modifying tens place (twos complement)");  // Write 0's to 10 addresses starting at address 1527 (100h)  9 digits
@@ -190,23 +233,22 @@ Serial.println("Modifying hundreds place (twos complement)");  // Write 0's to 1
   for (int value = 1693; value <= 1791; value += 1) {
     writeEEPROM(value, 0xA0);
    }  
+   
+*/
 //***********************************************************************************************************************************
 
 
 
 
 
-    Serial.println("Programming commands");
-    // A10 es A0 - A1
-    writeEEPROM(1024, 0x38 );   // Function set, 8 bit, 2 lines, 5x7 
-    writeEEPROM(1025, 0xF );    // Display ON, Cursor On, Cursor Blinking 
-    writeEEPROM(1026, 0x6 );    // Entry Mode, Increment cursor position, No display shift 
-    writeEEPROM(1027, 0x1 );    // Display clear
-    writeEEPROM(1028, 0xff );   // Nothing
 
 
 
 
+
+
+
+  
 
 
   // Read and print out the contents of the EERPROM

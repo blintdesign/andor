@@ -1,29 +1,43 @@
-; Set clock time
+; Hour
+h0 = 1
+h1 = 9
 
-; Status bits
-rtw #0x0f,#0x04,#0x01
+; Min
+m0 = 4
+m1 = 0
 
-;Hour
-rtw #0x2,#2,#0
+setup:
+	; Status bits
+	rtw #0x0f,#0x04,#0x01
 
-;Min
-rtw #0x1,#2,#0
+	;Hour
+	rtw #0x2,#h0,#h1
 
-;Sec
-rtw #0x0,#0,#0
+	;Min
+	rtw #0x1,#m0,#m1
 
+	;Sec
+	rtw #0x0,#0,#0
 
-test:
+display:
+	; Hour
 	rtr #0x02,0x40,0x41
-	lda 0x40
+	jsr calc
 	out #0x04
-	lda 0x41
-	out #0x00
 
+	; Min
 	rtr #0x01,0x40,0x41
-	lda 0x40
-	out #0x00
-	lda 0x41
-	out #0x00
+	jsr calc
+	out #0x0
 
-	jmp test
+	jmp display
+
+calc:
+	lda 0x40
+	asl
+	asl
+	asl
+	add 0x40
+	add 0x40
+	add 0x41
+	rts

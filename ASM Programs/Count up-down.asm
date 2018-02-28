@@ -1,24 +1,21 @@
-b = 0
-x = 1
-o = 5
+from = 1
+to   = 20
 
-ldi #x
-sta 0x81
-
-ldi #o
-sta 0x82
-
-ldi #b
-sta 0x80
+start:
+	ldi #from
 
 up:
-	add 0x81
-	out #0x04
-	cmp 0x82
+	add #1
+	lcd #0x1
+	out.d
+	cmp #to
 	beq down
 	jmp up
+	
 down:
-	sub 0x81
-	out #0x04
+	sub #1
+	lcd #0x1
+	out.d
+	cmp #from
 	beq up
 	jmp down

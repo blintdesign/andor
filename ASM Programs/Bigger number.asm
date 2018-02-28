@@ -1,15 +1,13 @@
 x = 111
 y = 75
 
-ldi #x
-sta 0x80
-ldi #y
+calc:
+	ldi #y
+	sub #x
 
-sub 0x80
-
-beq equal
-bcs last
-jmp first
+	beq equal
+	bcs last
+	jmp first
 
 equal:
 	ldi #0
@@ -21,9 +19,7 @@ last:
 
 first:
 	ldi #x
-	jmp out
-
+	
 out:
 	out #0x04
-	nop
 	hlt

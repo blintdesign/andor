@@ -1,0 +1,17 @@
+
+0F	LCD ON, Cursor ON, Cursor blinking ON
+01	Clear screen
+02	Return home
+04	Decrement cursor
+06	Increment cursor
+0E	Display ON ,Cursor blinking OFF
+80	Force cursor to the beginning of  1st line
+C0	Force cursor to the beginning of 2nd line
+38	Use 2 lines and 5×7 matrix
+83	Cursor line 1 position 3
+3C	Activate second line
+08	Display OFF, Cursor OFF
+C1	Jump to second line, position1
+OC	Display ON, Cursor OFF
+C1	Jump to second line, position1
+C2	Jump to second line, position2
