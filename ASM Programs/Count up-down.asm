@@ -5,7 +5,7 @@ start:
 	ldi #from
 
 up:
-	add #1
+	adc #1
 	lcd #0x1
 	out.d
 	cmp #to
@@ -13,7 +13,7 @@ up:
 	jmp up
 	
 down:
-	sub #1
+	sbc #1
 	lcd #0x1
 	out.d
 	cmp #from

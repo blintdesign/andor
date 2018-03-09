@@ -3,7 +3,7 @@ y = 106
 
 math:
 	ldi #x
-	add #y
+	adc #y
 
 out:
 	lcd #0x1

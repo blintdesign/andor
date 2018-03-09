@@ -18,4 +18,3 @@ right:
 left:
 	out.c #126
 	jmp loop
-

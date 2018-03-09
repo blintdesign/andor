@@ -23,8 +23,6 @@ loop:
 	jmp loop
 
 out:
-	lda 0x40
-	out.d
-	lda 0x41
-	out.d
+	out.d 0x40
+	out.d 0x41
 	rts

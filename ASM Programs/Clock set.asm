@@ -1,43 +1,14 @@
-; Hour
-h0 = 1
-h1 = 9
+; Status bits
+rtw #0x0f,#0x04,#0x01
 
-; Min
-m0 = 4
-m1 = 0
+;Y M D
+rtw #0x5,#1,#8
+rtw #0x4,#0,#2
+rtw #0x3,#0,#1
 
-setup:
-	; Status bits
-	rtw #0x0f,#0x04,#0x01
+;H M S
+rtw #0x2,#0,#1
+rtw #0x1,#0,#1
+rtw #0x0,#0,#0
 
-	;Hour
-	rtw #0x2,#h0,#h1
-
-	;Min
-	rtw #0x1,#m0,#m1
-
-	;Sec
-	rtw #0x0,#0,#0
-
-display:
-	; Hour
-	rtr #0x02,0x40,0x41
-	jsr calc
-	out #0x04
-
-	; Min
-	rtr #0x01,0x40,0x41
-	jsr calc
-	out #0x0
-
-	jmp display
-
-calc:
-	lda 0x40
-	asl
-	asl
-	asl
-	add 0x40
-	add 0x40
-	add 0x41
-	rts
+hlt

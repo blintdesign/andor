@@ -1,9 +1,9 @@
 x = 111
-y = 75
+y = 175
 
 calc:
 	ldi #y
-	sub #x
+	sbc #x
 
 	beq equal
 	bcs last
@@ -21,5 +21,6 @@ first:
 	ldi #x
 	
 out:
-	out #0x04
+	lcd #0x01
+	out.d
 	hlt

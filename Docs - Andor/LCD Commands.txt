@@ -13,5 +13,17 @@ C0	Force cursor to the beginning of 2nd line
 08	Display OFF, Cursor OFF
 C1	Jump to second line, position1
 OC	Display ON, Cursor OFF
-C1	Jump to second line, position1
 C2	Jump to second line, position2
+C1	Jump to second line, position1
+
+
+
+fekete = GND
+piros : vcc
+
+5 rozsaszin
+4 narancs
+3 zold
+2 sarga
+
+

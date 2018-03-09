@@ -1,14 +1,15 @@
 x = 7
 
 start:
+	lcd #0x01
 	ldi #0
 
 loop:
-	out #0x04
-	add #x
+	lcd #0xff
+	out.d
+	adc #x
 	bcs stop
 	jmp loop
 	
 stop:
 	hlt
-	

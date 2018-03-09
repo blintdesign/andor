@@ -10,7 +10,7 @@ start:
 
 loop:
 	out.c
-	add #0x01
+	adc #0x01
 	cmp #len + text
 	beq stop
 	jmp loop

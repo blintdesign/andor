@@ -120,25 +120,7 @@ RRW ROE RCS
  0   1   1    Százasok
  1   0   1    Tizesek
  1   1   1    Egyesek
-
-
-
-lcd #0x38
-lcd #0xF
-lcd #0x6
-lcd #0x1
-
-out.c #0x41 
-out.c #0x4e
-out.c #0x44 
-out.c #0x4f 
-out.c #0x52 
-out.c #0x20 
-out.d #0x1
-out.c #0x2e 
-out.d #0x0
-
-hlt
+ 
 */
 
   Serial.println("Delete bank 0");

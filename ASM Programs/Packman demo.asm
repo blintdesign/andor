@@ -9,23 +9,23 @@ start:
 	ldi  #0
 	out.c #0xfc
 map:
-	add #1
+	adc #1
 	out.c #0xa5
 	cmp #15
 	beq game
 	jmp map
 game:
-	sub #0x01
+	sbc #0x01
 
 	lcd #0xce
 	out.d
 	out.c #0x20
 
-	add #128
+	adc #128
 	lcd.a
 	out.c #0xba
 	out.c #0x20
-	sub #128
+	sbc #128
 	beq end
 	jmp game
 end:
@@ -33,7 +33,7 @@ end:
 	ldi #text
 over:
 	out.c
-	add #0x01
+	adc #0x01
 	cmp #len + text
 	beq stop
 	jmp over
