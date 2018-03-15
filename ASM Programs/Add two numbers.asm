@@ -8,9 +8,9 @@ math:
 out:
 	lcd #0x1
 	out.d #x
-	out.c 0x2b
+	out.c #0x2b
 	out.d #y
-	out.c 0x3d
+	out.c #0x3d
 	out.d
 
 end:

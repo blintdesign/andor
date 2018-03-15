@@ -249,48 +249,34 @@ EndFunc
 
 
 Func Load()
-   $delay = 1
+   $delay = 0.1
 
    $split = StringSplit( GUICtrlRead( $FieldHex ) ," ")
 
-   ; P=MI   SZ=RI   T=RO   N=CLK
-   SetLPTPortPins($CtrlPort, BinToDec( 1100 ) )  ; Init
-
-
-   Sleep( 10 )
+   Reset();
+   Sleep( $delay )
 
    For $x = 1 To $split[0]
-
-	  ;$log = _HexToBinaryString(  $split[$x] ) & " - " & Dec( $split[$x] ) & @CRLF
 	  $log = "Sending data to cumputer..."
 	  Guictrlsetdata($FieldLog, $log )
 
 	  _GUICtrlStatusBar_SetText($StatusBar, "Address: 0x" & HEX($x - 1, 2) & " Data: 0x" & $split[$x]   )
 
-
 	  ; Set memory address
 	  SetLPTPortPins($DataPort, $x - 1 )		; Address
-	  Sleep( $delay )
 	  SetLPTPortPins($CtrlPort, BinToDec( 0110 ) )		; MI
 	  Sleep( $delay )
 	  SetLPTPortPins($CtrlPort, BinToDec( 0111 ) )		; MI | CLK
 	  Sleep( $delay )
-;	  SetLPTPortPins($CtrlPort, BinToDec( 0110 ) )		; MI|CLK 2
-	  Sleep( $delay )
 
 	  ; Write data
 	  SetLPTPortPins($DataPort, BinToDec(_HexToBinaryString(  $split[$x] ) ) )	; Data
-	  Sleep( $delay )
 	  SetLPTPortPins($CtrlPort, BinToDec( 1010 ) )			; RI
 	  Sleep( $delay )
 	  SetLPTPortPins($CtrlPort, BinToDec( 1011 ) )			; RI|CLK
 	  Sleep( $delay )
-;	  SetLPTPortPins($CtrlPort, BinToDec( 1010 ) )			; RI|CLK 2
-	  Sleep( $delay )
 
    Next
-
-
 
    Sleep( 10 )
    SetLPTPortPins($DataPort, 0 )
@@ -300,11 +286,14 @@ Func Load()
 
    $log = "Done"
    Guictrlsetdata($FieldLog, $log )
-
 EndFunc
 
 
 Func SetState($sate)
+
+   ; P=MI   SZ=RI   T=RO   N=CLK
+   ; 1100 - Init
+
    Switch $sate
 	  Case "CLK"
 		 SetLPTPortPins($CtrlPort, BinToDec( 1101 ) ) ; Clock

@@ -1,0 +1,15 @@
+﻿Controll pins pinout:
+
+PIN		NAME			STATE		FUNCTION
+
+1		Strobe			High		CLK
+14		Linefeed		High		MI
+16		Initialize		High		RI
+17		Select			Low			RO
+
+
+
+Initial status in loader:
+
+MI	RI	RO	CLK
+1	1	0	0

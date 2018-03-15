@@ -1,29 +1,18 @@
-
-0F	LCD ON, Cursor ON, Cursor blinking ON
-01	Clear screen
-02	Return home
-04	Decrement cursor
-06	Increment cursor
-0E	Display ON ,Cursor blinking OFF
-80	Force cursor to the beginning of  1st line
-C0	Force cursor to the beginning of 2nd line
-38	Use 2 lines and 5×7 matrix
-83	Cursor line 1 position 3
-3C	Activate second line
-08	Display OFF, Cursor OFF
-C1	Jump to second line, position1
-OC	Display ON, Cursor OFF
-C2	Jump to second line, position2
-C1	Jump to second line, position1
-
-
-
-fekete = GND
-piros : vcc
-
-5 rozsaszin
-4 narancs
-3 zold
-2 sarga
-
-
+| HEX | COMMAND |
+| --- |--- |
+| 0x0F | LCD ON, Cursor ON, Cursor blinking ON|
+| 0x01 | Clear screen |
+| 0x02 | Return home |
+| 0x04 | Decrement cursor |
+| 0x06 | Increment cursor |
+| 0x0E | Display ON ,Cursor blinking OFF |
+| 0x80 | Force cursor to the beginning of  1st line |
+| 0xC0 | Force cursor to the beginning of 2nd line |
+| 0x38 | Use 2 lines and 5×7 matrix |
+| 0x83 | Cursor line 1 position 3 |
+| 0x3C | Activate second line |
+| 0x08 | Display OFF, Cursor OFF |
+| 0xC1 | Jump to second line, position1 |
+| 0xOC | Display ON, Cursor OFF |
+| 0xC2 | Jump to second line, position2 |
+| 0xC1 | Jump to second line, position1 |

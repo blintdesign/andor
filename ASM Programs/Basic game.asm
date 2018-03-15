@@ -7,8 +7,11 @@ loop:
 	ipr
 	adc #0
 	beq loop
-	cmp #0x04
+	cmp #8
 	beq left
+	cmp #1
+	beq right
+	jmp loop
 right:
 	lda 0x60
 	sbc #1
