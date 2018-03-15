@@ -1,6 +1,6 @@
 | HEX | COMMAND |
-| --- |--- |
-| 0x0F | LCD ON, Cursor ON, Cursor blinking ON|
+| --- | --- |
+| 0x0F | LCD ON, Cursor ON, Cursor blinking ON |
 | 0x01 | Clear screen |
 | 0x02 | Return home |
 | 0x04 | Decrement cursor |
