@@ -1,11 +1,13 @@
 #align 8
 
 lda {addr}           -> 8'0x10 @ (addr)[7:0]                     ; Load to A register from address
+lda.a                -> 8'0x88                                   ; 
 adc {addr}           -> 8'0x20 @ addr[7:0]                       ; Add to A register from address
 adc #{imm}           -> 8'0x68 @ imm[7:0]                        ; Add to A register from operand
 sbc {addr}           -> 8'0x30 @ (addr)[7:0]                     ; Subtract from A register from operand
 sbc #{imm}           -> 8'0x70 @ imm[7:0]                        ; Subtract from A register from operand
 sta {addr}           -> 8'0x40 @ (addr)[7:0]                     ; Stora A register to specified address
+sta.a #{imm}         -> 8'0x58 @ imm[7:0]                        ; 
 ldi #{imm}           -> 8'0x50 @ imm[7:0]                        ; Load specified value to A register
 jmp {addr}           -> 8'0x60 @ (addr)[7:0]                     ; Jump to specified address
 beq {addr}           -> 8'0x08 @ (addr -1)[7:0]                  ; Jump if zero flag is set
@@ -16,14 +18,11 @@ bmi {addr}           -> 8'0x38 @ (addr -1)[7:0]                  ; Jump if negat
 nop                  -> 8'0x00                                   ; Nothing (empty circle)
 hlt                  -> 8'0xf0                                   ; Halt the clock
 asl                  -> 8'0x48                                   ; Shift A register value to left
-lsr                  -> 8'0x58                                   ; Shift A register value to right
+;lsr                 -> 8'0x58                                   ; Shift A register value to right (not implemented)
 jsr {addr}           -> 8'0xA0 @ (addr)[7:0]                     ; Jump to subrutine
 rts                  -> 8'0xB0                                   ; Return from subrutin
 rtr #{imm},{t},{o}   -> 4'0x08 @ imm[3:0] @ (t)[7:0] @ (o)[7:0]  ; Read the Real Time Clock
 rtw #{imm},#{t},#{o} -> 4'0x09 @ imm[3:0] @   t[7:0] @   o[7:0]  ; Write the Real Time Clock
-lcd {addr}           -> 8'0x88 @ (addr)[7:0]                     ; LCD command from addrss
-lcd #{imm}           -> 8'0x98 @ imm[7:0]                        ; LCD command from operand
-lcd.a                -> 8'0xA8                                   ; LCD command from A register
 out.c {addr}         -> 8'0xB8 @ (addr)[7:0]                     ; Print char from address
 out.c #{imm}         -> 8'0xC8 @ imm[7:0]                        ; Print char from operand
 out.c                -> 8'0xD8                                   ; Print char from A register
@@ -31,3 +30,17 @@ out.d {addr}         -> 8'0xE8 @ addr[7:0]                       ; Print int fro
 out.d #{imm}         -> 8'0xE0 @ imm[7:0]                        ; Print int from operand
 out.d                -> 8'0xF8                                   ; Print int from A register
 ipr                  -> 8'0xc0                                   ; Input port read
+
+;lcd {addr}          -> 8'0x88 @ (addr)[7:0]                     ; LCD command from addrss
+lcd #{imm}           -> 8'0x98 @ imm[7:0]                        ; LCD command from operand
+lcd.a                -> 8'0xA8                                   ; LCD command from A register
+lcd clr              -> 8'0x98 @ 8'0x01                          ; LCD: Clear screen
+lcd cur_off          -> 8'0x98 @ 8'0x0c                          ; LCD: Cursor off
+lcd cur_on           -> 8'0x98 @ 8'0x0f                          ; LCD: Cursor on
+
+; Development codes
+
+lcd pos #1,#{r}     -> 8'0x98 @ (0x80 + r)[7:0]                  ; 
+lcd pos #2,#{r}     -> 8'0x98 @ (0xc0 + r)[7:0]                  ; 
+
+lcd pos #1,a        -> 8'0xA8                                    ;

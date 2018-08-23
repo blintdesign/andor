@@ -14,8 +14,15 @@
 
 ; Port variablee
 $DLLFileAndPath = @ScriptDir & "/inpout32.dll";
+
+; PC Ports:
 $DataPort = "0xE880";
 $CtrlPort = "0xE882";
+
+; Laptop Ports:
+;$DataPort = "0x378";
+;$CtrlPort = "0x37A";
+
 
 ; Inicialize ports
 Dim $StatusRegisterAddress, $ControlRegisterAddress
@@ -41,8 +48,8 @@ $idSeparator1 = GUICtrlCreateMenuItem("", $idFileMenu)
 $idExitItem = GUICtrlCreateMenuItem("Exit", $idFileMenu)
 
 $idMenuOpen = GUICtrlCreateMenuItem("&Open", -1)
+$idMenuOpenBin = GUICtrlCreateMenuItem("&Open Bin", -1)
 $idMenuSave = GUICtrlCreateMenuItem("&Save", -1)
-
 
 
 ; Labels
@@ -59,7 +66,7 @@ GUICtrlSetResizing($eventLog, $GUI_DOCKTOP + $GUI_DOCKSIZE + $GUI_DOCKRIGHT)
 $FieldEditor = GUICtrlCreateEdit("", 5, 5, 485, 600, BitOR($ES_WANTRETURN, $ES_MULTILINE, $ES_NOHIDESEL, $WS_VSCROLL))
 GUICtrlSetFont(-1, 11, $FW_NORMAL, -1, "Consolas")
 
-$FieldHex = GUICtrlCreateEdit("",  500, 70, 290, 175, BitOR($ES_WANTRETURN, $ES_MULTILINE, $ES_NOHIDESEL))
+$FieldHex = GUICtrlCreateEdit("",  500, 70, 290, 175, BitOR($ES_WANTRETURN, $ES_MULTILINE, $ES_NOHIDESEL, $WS_VSCROLL))
 GUICtrlSetFont(-1, 11, $FW_NORMAL, -1, "Consolas")
 
 $FieldLog = GUICtrlCreateEdit("",  500, 280, 290, 325, BitOR($ES_WANTRETURN, $ES_MULTILINE, $WS_VSCROLL))
@@ -100,8 +107,6 @@ GUICtrlSetResizing($StatusBar, $GUI_DOCKBOTTOM + $GUI_DOCKSIZE + $GUI_DOCKLEFT)
 $AddrPager = GUICtrlCreateInput("0", 5, 620, 100, 25)
 GUICtrlCreateUpdown($AddrPager)
 GUICtrlSetResizing($AddrPager, $GUI_DOCKBOTTOM + $GUI_DOCKSIZE + $GUI_DOCKLEFT)
-
-
 
 
 GUICtrlSetLimit(-1, 0xFFFFFF)
@@ -194,6 +199,34 @@ Func Open()
    EndIf
 EndFunc
 
+
+; File open function
+
+Func OpenBin()
+   ; Create a constant variable in Local scope of the message to display in FileOpenDialog.
+   Local Const $sMessage = "Open binary file"
+
+   ; Display an open dialog to select a list of file(s).
+   Local $sFileOpenDialog = FileOpenDialog($sMessage, @ScriptDir & "\", "Machine Code (*.bin)", $FD_FILEMUSTEXIST )
+
+   If Not @error Then
+      ; Change the working directory (@WorkingDir)
+      FileChangeDir(@ScriptDir)
+
+      ; Replace instances of "|" with @CRLF in the string returned by FileOpenDialog.
+      $sFileOpenDialog = StringReplace($sFileOpenDialog, "|", @CRLF)
+
+	  GUICtrlCreateMenuItem($sFileOpenDialog, $idRecentFilesMenu)
+
+	  ; Load file to hex editor
+	  $file = FileOpen( $sFileOpenDialog )
+	  Guictrlsetdata($FieldHex, FileRead($file))
+	  FileClose($file)
+
+   EndIf
+EndFunc
+
+
 #include <Array.au3>
 Func Complie()
    $scr_file = @ScriptDir & "/asm/source.asm"
@@ -249,7 +282,7 @@ EndFunc
 
 
 Func Load()
-   $delay = 0.1
+   $delay = 5
 
    $split = StringSplit( GUICtrlRead( $FieldHex ) ," ")
 
@@ -286,8 +319,19 @@ Func Load()
 
    $log = "Done"
    Guictrlsetdata($FieldLog, $log )
+
+   $log = "Controll Port: " & $CtrlPort & "; Data Port: " & $DataPort
+   Guictrlsetdata($FieldLog, $log )
 EndFunc
 
+Func SetPorts()
+   $CtrlPort = GUICtrlRead( $CtrlAddr )
+   $DataPort = GUICtrlRead( $DataAddr )
+
+   $log = "Controll Port: " & $CtrlPort & "; Data Port: " & $DataPort
+   Guictrlsetdata($FieldLog, $log )
+
+EndFunc
 
 Func SetState($sate)
 
@@ -323,6 +367,8 @@ Do
 		 Complie()
 	  Case $idMenuOpen
 		 Open()
+	  Case $idMenuOpenBin
+		 OpenBin()
 	  Case $idLoad
 		 Load()
 	  Case $idCompALad
@@ -337,7 +383,7 @@ Do
 		 SetState("RI")
 	  Case $idDEF
 		 SetState("DEF")
-      Case $GUI_EVENT_CLOSE
+	        Case $GUI_EVENT_CLOSE
          GUIDelete()
          Exit
     EndSwitch
