@@ -3,8 +3,9 @@
 This is ANDOR (AND-OR) my 8-bit breadboard computer.
 Inspired by Ben Eater and his series about building an 8 bit computer: http://eater.net
 
-ANDOR YouTube channel: https://www.youtube.com/playlist?list=PLOlxf8qMiBT00kGVkUlEaljKMdjT1aq8r
+YouTube channel: https://www.youtube.com/playlist?list=PLOlxf8qMiBT00kGVkUlEaljKMdjT1aq8r
 
+Shematics: https://easyeda.com/blintux/andor
 
 
 ## Features
@@ -15,5 +16,5 @@ ANDOR YouTube channel: https://www.youtube.com/playlist?list=PLOlxf8qMiBT00kGVkU
 * 16x2 LCD display
 * Real Time Clock
 * Program loader port (LPT)
-* Input port for controller, keyboard
+* Input port for controller
 
