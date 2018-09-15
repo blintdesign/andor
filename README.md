@@ -18,5 +18,8 @@ Shematics: https://easyeda.com/blintux/andor
 * Program loader port (LPT)
 * Input port for controller
 
+## Modules
+<p align="center">
 ![Modules](../master/Images/ModulesAnim.gif)
+</p>
 
