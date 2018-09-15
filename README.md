@@ -19,7 +19,5 @@ Shematics: https://easyeda.com/blintux/andor
 * Input port for controller
 
 ## Modules
-<p align="center">
 ![Modules](../master/Images/ModulesAnim.gif)
-</p>
 
