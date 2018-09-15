@@ -3,13 +3,13 @@
 This is ANDOR (AND-OR) my 8-bit breadboard computer.
 Inspired by Ben Eater and his series about building an 8 bit computer: http://eater.net
 
-:warning: **Please note that this project is under development and the hardware might change over time.**
+:warning: **Please note that this project is under development and the hardware might change over time.**  
 Check back sometime or follow me on YouTube
 
-YouTube: https://www.youtube.com/playlist?list=PLOlxf8qMiBT00kGVkUlEaljKMdjT1aq8r
+YouTube: https://www.youtube.com/playlist?list=PLOlxf8qMiBT00kGVkUlEaljKMdjT1aq8r  
 Shematics: https://easyeda.com/blintux/andor
-
-
+  
+  
 ## Features
 * 8 bit data/address bus
 * 256 bytes memory
